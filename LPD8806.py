@@ -152,9 +152,9 @@ class strand:
 
 	#Fill the strand (or a subset) with a single color using a Hue value. 
 	#Saturation and Value components of HSV are set to max.
-	def fillHue(self, hue):
+	def fillHue(self, hue, start=0, end=0):
 		color = Color()
-		color.setHue(hue)
+		color.setHSV(hue, 1.0, 1.0)
 		self.fill(color, start, end)
 
 	#internal use only. sets pixel color
@@ -185,7 +185,7 @@ class strand:
 	#Saturation and Value components of HSV are set to max.
 	def setHue(self, pixel, hue):
 		color = Color()
-		color.setHue(hue)
+		color.setHSV(hue, 1.0, 1.0)
 		self.set(pixel, color)
 
 	#Turn all LEDs off.
