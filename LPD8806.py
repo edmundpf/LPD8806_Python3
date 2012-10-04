@@ -40,8 +40,8 @@ class Color:
 		self.G = 0
 		self.B = 0
 		self.H = 0.0
-		self.S = 0.0
-		self.V = 0.0
+		self.S = 1.0
+		self.V = 1.0
 		
 	def setRGB(self, r, g, b):
 		self.R = r
@@ -54,9 +54,9 @@ class Color:
 		
 	def setHSV(self, h, s, v):
 		r, g, b = colorsys.hsv_to_rgb(h, s, v)
-		self.R = int(r * 255)
-		self.G = int(g * 255)
-		self.B = int(b * 255)
+		self.R = int(r)
+		self.G = int(g)
+		self.B = int(b)
 		self.H = h
 		self.S = s
 		self.V = v
@@ -64,8 +64,11 @@ class Color:
 	def setHue(self, hue):
 		self.setHSV(hue, self.S, self.V)
 		
-	def setLevel(self, level):
-		self.setHSV(self.H, self.S, self.V)
+	def setSaturation(self, sat):
+		self.setHSV(self.H, sat, self.V)
+		
+	def setValue(self, value):
+		self.setHSV(self.H, self.S, value)
 		
 		
 
@@ -81,6 +84,7 @@ class strand:
 		self.dev = dev
 		self.spi = file(self.dev, "wb")
 		self.leds = leds
+		self.lastIndex = self.leds - 1
 		self.gamma = bytearray(256)
 		self.buffer = [0 for x in range(self.leds)]
 		
@@ -128,12 +132,10 @@ class strand:
 	#Fill the strand (or a subset) with a single color using a Color object
 	def fill(self, color, start=0, end=0):
 		if start < 0:
-			raise NameError("Start invalid:" + str(start))
-		if end == 0:
-			end = self.leds
-		if end > self.leds:
-			raise NameError("End invalid: " + str(end))
-		for led in range(start, end):
+			start = 0
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
+		for led in range(start, end + 1): #since 0-index include end in range
 			self.__set_internal(led, color)
 
 		self.__auto_update()
@@ -156,6 +158,9 @@ class strand:
 		color = Color()
 		color.setHSV(hue, 1.0, 1.0)
 		self.fill(color, start, end)
+		
+	def fillOff(self, start=0, end=0):
+		self.fillRGB(0, 0, 0, start, end)
 
 	#internal use only. sets pixel color
 	def __set_internal(self, pixel, color):
@@ -187,6 +192,10 @@ class strand:
 		color = Color()
 		color.setHSV(hue, 1.0, 1.0)
 		self.set(pixel, color)
+		
+	#turns off the desired pixel
+	def setOff(self, pixel):
+		self.setRGB(pixel, 0, 0, 0)
 
 	#Turn all LEDs off.
 	def all_off(self):
@@ -222,9 +231,9 @@ class strand:
 
 	#generate rainbow
 	def anim_rainbow(self, start=0, end=0):
-		if end == 0 or end > self.leds:
-			end = self.leds - 1
-		size = end - start
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
+		size = end - start + 1
 		
 		auto = self.auto_update
 		self.setAutoUpdate(False)
@@ -241,9 +250,9 @@ class strand:
 		
 	#Generate rainbow wheel equally distributed over strip
 	def anim_rainbow_cycle(self, start=0, end=0):
-		if end == 0 or end > self.leds:
-			end = self.leds - 1
-		size = end - start
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
+		size = end - start + 1
 		
 		auto = self.auto_update
 		self.setAutoUpdate(False)
@@ -260,14 +269,13 @@ class strand:
 		
 	#fill the dots progressively along the strip
 	def anim_color_wipe(self, color, start=0, end=0):
-		if end == 0 or end > self.leds:
-			end = self.leds - 1
-		size = end - start
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
 			
 		auto = self.auto_update
 		self.setAutoUpdate(False)
 		if(self.wipeStep == 0):
-			self.fillRGB(0,0,0)
+			self.fillOff()
 		
 		self.set(start + self.wipeStep, color)
 		self.setAutoUpdate(auto)
@@ -279,16 +287,16 @@ class strand:
 		
 	#chase one pixel down the strip
 	def anim_color_chase(self, color, start=0, end=0):
-		if end == 0 or end > self.leds:
-			end = self.leds - 1
-		size = end - start
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
 			
 		auto = self.auto_update
 		self.setAutoUpdate(False)
+		#self.fillOff()
 		if(self.chaseStep == 0):
-			self.setRGB(end, 0, 0, 0)
+			self.setOff(end)
 		else:
-			self.setRGB(start + self.chaseStep - 1, 0, 0, 0)
+			self.setOff(start + self.chaseStep - 1)
 			
 		self.set(start + self.chaseStep, color)
 		self.setAutoUpdate(auto)
@@ -299,44 +307,41 @@ class strand:
 			self.chaseStep = 0
 		
 	#larson scanner (i.e. Cylon Eye or K.I.T.T.)
-	def anim_larson_scanner(self, color, tail=0, start=0, end=0):
-		if end == 0 or end > self.leds:
-			end = self.leds - 1
+	def anim_larson_scanner(self, color, tail=3, start=0, end=0):
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
 		size = end - start
 		
-		'''
-		if tail >= size:
-			tail = size - 1
-			
-		if self.larsonDir == 0:
-			dir = -1
-		else:
-			dir = 1
-		'''
+		tail += 1 #makes tail math later easier
+		if tail >= size / 2:
+			tail = (size / 2) - 1
+		
 		auto = self.auto_update
 		self.setAutoUpdate(False)
 		
-		self.setRGB(self.larsonLast, 0, 0, 0)# + dir * tail, 0, 0, 0)
-				
-		c = (self.larsonStep * (384 / size)) % 384
-		color = self.wheel_color(c)
+		self.fillOff(start, end)
 			
 		self.larsonLast = start + self.larsonStep;
 		self.set(self.larsonLast, color)
-		'''
+		
+		
 		tailColor = Color()
 		tailColor.setRGB(color.R, color.G, color.B)
-		
-		origTail = tail
-		if self.larsonDir == 0 and self.larsonStep < tail:
-			tail = self.larsonStep
-		elif self.larsonDir == 1 and (size - self.larsonStep) < tail:
-			tail = size - self.larsonStep
+		tl = tail
+		if(self.larsonLast + tl > end):
+			tl = end - self.larsonLast
+		tr = tail
+		if(self.larsonLast - tr < start):
+			tr = self.larsonLast - start
 			
-		for t in range(tail-1):
-			tailColor.setLevel(color.V * (float(t) / float(origTail)))
-			self.set(self.larsonLast + dir * tail, tailColor)
-		'''
+		for l in range(1, tl + 1):
+			tailColor.setValue(color.V * (float(tail - l) / float(tail)) * 0.8)
+			self.set(self.larsonLast + l, tailColor)
+			
+		for r in range(1, tr + 1):
+			tailColor.setValue(color.V * (float(tail - r) / float(tail)) * 0.8)
+			self.set(self.larsonLast - r, tailColor)
+		
 		self.setAutoUpdate(auto)
 		self.__auto_update()
 		
@@ -350,5 +355,17 @@ class strand:
 		else:
 			self.larsonStep -= 1
 		
+	#larson scanner (i.e. Cylon Eye or K.I.T.T.) but Rainbow
+	def anim_larson_rainbow(self, tail=3, start=0, end=0):
+		#self.setOff(self.larsonLast)# + dir * tail, 0, 0, 0)
+		
+		if end == 0 or end > self.lastIndex:
+			end = self.lastIndex
+		size = end - start
+		
+		c = (self.larsonStep * (384 / size)) % 384
+		color = self.wheel_color(c)
+		
+		self.anim_larson_scanner(color, tail, start, end)
 		
 
