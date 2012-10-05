@@ -5,45 +5,56 @@ from LPD8806 import *
 
 num = 36;
 led = strand(num)
-led.setAutoUpdate()
+#led.setAutoUpdate()
 led.setChannelOrder(ChannelOrder.BRG)
 led.all_off()
 
-led.fillRGB(255, 255, 255)
-sleep(2)
+for i in range(1, num + 1):
+	led.fillOff()
+	led.fillRGB(255, 255, 255, 0, i)
+	led.update()
+	sleep(0.05)
 
-hue = 0.0
-color = Color()
-color.setHSV(hue, 1.0, 0.5)
+sleep(3.0)
 
-while hue <= 1.0:
-	led.fill(color)
-	hue += 0.01
-	color.setHue(hue)
-	sleep(0.03)
+r = 255.0
+g = 0.0
+b = 0.0
+level = 0.0
+while level <= 1.0:
+	led.fillRGB(r * level, g * level, b * level)
+	led.update()
+	level += 0.01
+	sleep(0.005)
 
-value = 0.0	
-color.setHSV(0.0, 1.0, value)
-while value <= 1.0:
-	led.fill(color)
-	value += 0.01
-	color.setValue(value)
-	sleep(0.02)
+r = 0.0
+g = 255.0
+b = 0.0
+level = 0.0
+while level <= 1.0:
+	led.fillRGB(r * level, g * level, b * level)
+	led.update()
+	level += 0.01
+	sleep(0.005)
 	
-value = 0.0	
-color.setHSV(120.0 / 360.0, 1.0, value)
-while value <= 1.0:
-	led.fill(color)
-	value += 0.01
-	color.setValue(value)
-	sleep(0.02)
+r = 0.0
+g = 0.0
+b = 255.0
+level = 0.0
+while level <= 1.0:
+	led.fillRGB(r * level, g * level, b * level)
+	led.update()
+	level += 0.01
+	sleep(0.005)
 	
-value = 0.0	
-color.setHSV(240.0 / 360.0, 1.0, value)
-while value <= 1.0:
-	led.fill(color)
-	value += 0.01
-	color.setValue(value)
+r = 255.0
+g = 255.0
+b = 255.0
+level = 0.0
+while level <= 1.0:
+	led.fillRGB(r * level, g * level, b * level)
+	led.update()
+	level += 0.01
 	sleep(0.02)
 
 led.all_off()

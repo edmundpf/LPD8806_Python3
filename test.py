@@ -5,56 +5,57 @@ from LPD8806 import *
 
 num = 36;
 led = strand(num)
-led.setAutoUpdate()
+#led.setAutoUpdate()
 led.setChannelOrder(ChannelOrder.BRG)
-led.all_off()
+led.fillOff()
 
 color = Color()
 color.setHue(0.0)
 
 for i in range(384):
 	led.anim_rainbow()
+	led.update()
 	
-led.all_off()
+led.fillOff()
 sleep(0.5)
 	
 for i in range(384):
 	led.anim_rainbow_cycle()
+	led.update()
 	
-led.all_off()
+led.fillOff()
 
 color.setRGB(127, 255, 0)
 for i in range(num*4):
 	led.anim_color_wipe(color)
+	led.update()
 	sleep(0.03)
 	
-led.all_off()
+led.fillOff()
 
 color.setRGB(127, 127, 255)
-for i in range(num*20):
+for i in range(num*4):
 	led.anim_color_chase(color)
-	#sleep(0.03)
-
-led.all_off()
-
-color.setRGB(255, 0, 0)
-for i in range(num*8):
-	led.anim_larson_scanner(color)
+	led.update()
 	sleep(0.03)
 
-led.all_off()
+led.fillOff()
 
-for i in range(num*8):
-	led.anim_larson_rainbow()
+color.setRGB(255, 0, 0)
+for i in range(num*4):
+	led.anim_larson_scanner(color)
+	led.update()
+	sleep(0.03)
+
+led.fillOff()
+
+for i in range(num*4):
+	led.anim_larson_rainbow(2, 0.5)
+	led.update()
 	sleep(0.05)
 
-led.all_off()
+led.fillOff()
+led.update()
 
-
-
-
-
-
-led.all_off()
 
 

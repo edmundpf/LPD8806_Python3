@@ -36,40 +36,41 @@ class ChannelOrder:
 class Color:
 	
 	def __init__(self):
-		self.R = 0
-		self.G = 0
-		self.B = 0
+		self.R = 0.0
+		self.G = 0.0
+		self.B = 0.0
 		self.H = 0.0
 		self.S = 1.0
 		self.V = 1.0
 		
 	def setRGB(self, r, g, b):
-		self.R = r
-		self.G = g
-		self.B = b
-		h, s, v = colorsys.rgb_to_hsv(r, g, b)
+		if(r > 255.0 or r < 0.0 or g > 255.0 or g < 0.0 or b > 255.0 or b < 0.0):
+			raise ValueError('RGB values must be between 0 and 255')
+		self.R = float(r)
+		self.G = float(g)
+		self.B = float(b)
+		h, s, v = colorsys.rgb_to_hsv((float(r)/255.0), (float(g)/255.0), (float(b)/255.0))
 		self.H = h
 		self.S = s
 		self.V = v
 		
 	def setHSV(self, h, s, v):
-		r, g, b = colorsys.hsv_to_rgb(h, s, v)
-		self.R = int(r)
-		self.G = int(g)
-		self.B = int(b)
+		if(h > 360.0 or h < 0.0):
+			raise ValueError('Hue value must be between 0.0 and 360.0')
+		if(s > 1.0 or s < 0.0):
+			raise ValueError('Saturation must be between 0.0 and 1.0')
+		if(v > 1.0 or v < 0.0):
+			raise ValueError('Value must be between 0.0 and 1.0')
+		r, g, b = colorsys.hsv_to_rgb(h / 360.0, s, v)
+		self.R = r * 255.0
+		self.G = g * 255.0
+		self.B = b * 255.0
 		self.H = h
 		self.S = s
 		self.V = v
 		
 	def setHue(self, hue):
-		self.setHSV(hue, self.S, self.V)
-		
-	def setSaturation(self, sat):
-		self.setHSV(self.H, sat, self.V)
-		
-	def setValue(self, value):
-		self.setHSV(self.H, self.S, value)
-		
+		self.setHSV(hue, self.S, self.V)		
 		
 
 class strand:
@@ -86,7 +87,7 @@ class strand:
 		self.leds = leds
 		self.lastIndex = self.leds - 1
 		self.gamma = bytearray(256)
-		self.buffer = [0 for x in range(self.leds)]
+		self.buffer = [0 for x in range(self.leds + 1)]
 		
 		#anim step vars
 		self.wheelStep = 0
@@ -164,9 +165,9 @@ class strand:
 
 	#internal use only. sets pixel color
 	def __set_internal(self, pixel, color):
-		self.buffer[pixel][self.c_order[0]] = self.gamma[color.R]
-		self.buffer[pixel][self.c_order[1]] = self.gamma[color.G]
-		self.buffer[pixel][self.c_order[2]] = self.gamma[color.B]
+		self.buffer[pixel][self.c_order[0]] = self.gamma[int(color.R)]
+		self.buffer[pixel][self.c_order[1]] = self.gamma[int(color.G)]
+		self.buffer[pixel][self.c_order[2]] = self.gamma[int(color.B)]
 		
 	#Set single pixel to Color value
 	def set(self, pixel, color):
@@ -307,7 +308,7 @@ class strand:
 			self.chaseStep = 0
 		
 	#larson scanner (i.e. Cylon Eye or K.I.T.T.)
-	def anim_larson_scanner(self, color, tail=3, start=0, end=0):
+	def anim_larson_scanner(self, color, tail=2, fade=0.75, start=0, end=0):
 		if end == 0 or end > self.lastIndex:
 			end = self.lastIndex
 		size = end - start
@@ -319,14 +320,9 @@ class strand:
 		auto = self.auto_update
 		self.setAutoUpdate(False)
 		
-		self.fillOff(start, end)
-			
 		self.larsonLast = start + self.larsonStep;
 		self.set(self.larsonLast, color)
 		
-		
-		tailColor = Color()
-		tailColor.setRGB(color.R, color.G, color.B)
 		tl = tail
 		if(self.larsonLast + tl > end):
 			tl = end - self.larsonLast
@@ -335,12 +331,19 @@ class strand:
 			tr = self.larsonLast - start
 			
 		for l in range(1, tl + 1):
-			tailColor.setValue(color.V * (float(tail - l) / float(tail)) * 0.8)
-			self.set(self.larsonLast + l, tailColor)
+			level = (float(tail - l) / float(tail)) * fade
+			self.setRGB(self.larsonLast + l, color.R * level, color.G * level, color.B * level)
+
+		if(self.larsonLast + tl + 1 <= end):
+			self.setOff(self.larsonLast + tl + 1)
 			
 		for r in range(1, tr + 1):
-			tailColor.setValue(color.V * (float(tail - r) / float(tail)) * 0.8)
-			self.set(self.larsonLast - r, tailColor)
+			level = (float(tail - r) / float(tail)) * fade
+			self.setRGB(self.larsonLast - r, color.R * level, color.G * level, color.B * level)
+
+			
+		if(self.larsonLast - tr - 1 >= start):
+			self.setOff(self.larsonLast - tr - 1)
 		
 		self.setAutoUpdate(auto)
 		self.__auto_update()
@@ -356,16 +359,15 @@ class strand:
 			self.larsonStep -= 1
 		
 	#larson scanner (i.e. Cylon Eye or K.I.T.T.) but Rainbow
-	def anim_larson_rainbow(self, tail=3, start=0, end=0):
-		#self.setOff(self.larsonLast)# + dir * tail, 0, 0, 0)
-		
+	def anim_larson_rainbow(self, tail=2, fade=0.75, start=0, end=0):
 		if end == 0 or end > self.lastIndex:
 			end = self.lastIndex
 		size = end - start
 		
-		c = (self.larsonStep * (384 / size)) % 384
-		color = self.wheel_color(c)
+		hue = (self.larsonStep * (360 / size))
+		color = Color()
+		color.setHue(hue)
 		
-		self.anim_larson_scanner(color, tail, start, end)
+		self.anim_larson_scanner(color, tail, fade, start, end)
 		
 
