@@ -9,7 +9,7 @@ Initial code from: https://github.com/Sh4d/LPD8806
 Provides the ability to drive a LPD8806 based strand of RGB leds from the
 Raspberry Pi
 
-Colors are provided as RGB and converted internally to the strand's 7 bit
+Colors are provided as RGB and converted internally to the strip's 7 bit
 values.
 
 
@@ -17,7 +17,10 @@ Wiring:
 	Pi MOSI -> Strand DI
 	Pi SCLK -> Strand CI
 
-Make sure to use an external power supply to power the strand
+Most strips use around 10W per meter (for ~32 LEDs/m) or 2A at 5V.
+The Raspberry Pi cannot even come close to this so a larger power supply is required, however, do to voltage loss along long runs you will need to put in a new power supply at least every 5 meters. Technically you can power the Raspberry Pi through the GPIO pins and use the same supply as the strips, but I would recommend just using the USB power as it's a much safer option.
+
+Also, while it *should* work without it to be safe you should add a level converter between the Raspberry Pi and the strip's data lines. This will also help you have longer runs.
 
 Example:
 	>> import LPD8806
@@ -31,12 +34,18 @@ Example:
 #to set the order your strands use
 class ChannelOrder:
 	RGB = [0,1,2] #Probably not used, here for clarity
+	
 	GRB = [1,0,2] #Strands from Adafruit and some others (default)
 	BRG = [1,2,0] #Strands from many other manufacturers
+	
+	
+	
+	
 	
 #Main color object used by all methods
 class Color:
 	
+	#Initialize Color object with option of passing RGB values and brightness
 	def __init__(self, r=0.0, g=0.0, b=0.0, bright=1.0):
 		if(r > 255.0 or r < 0.0 or g > 255.0 or g < 0.0 or b > 255.0 or b < 0.0):
 			raise ValueError('RGB values must be between 0 and 255')
@@ -54,7 +63,7 @@ class Color:
 	def __str__( self ):
 		return "%d,%d,%d" % (self.R, self.G, self.B)
 		
-#useful for natural color transitions. Increment huge to sweep through the colors
+#useful for natural color transitions. Increment hue to sweep through the colors
 #must call getColorRGB() before passing to any of the methods
 class ColorHSV:
 	def __init__(self, h=360.0, s=1.0, v=1.0):

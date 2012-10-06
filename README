@@ -1,6 +1,0 @@
-Raspberry Pi library for LPD8806 based RGB light strips
-Initial code from: https://github.com/Sh4d/LPD8806
-
-Download, extract, then run the help:
-  >>> import LPD8806
-  >>> help(LPD8806)
