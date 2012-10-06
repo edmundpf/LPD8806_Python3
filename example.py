@@ -32,6 +32,8 @@ for c in range(4):
 		
 led.all_off()
 
+#animations - each animation method moves the animation forward one step on each call
+#after each step, call update() to push it to the LED strip
 #sin wave animations
 color = Color(255, 0, 0)
 for i in range(led.lastIndex):
