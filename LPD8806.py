@@ -18,7 +18,7 @@ Wiring:
 	Pi SCLK -> Strand CI
 
 Most strips use around 10W per meter (for ~32 LEDs/m) or 2A at 5V.
-The Raspberry Pi cannot even come close to this so a larger power supply is required, however, do to voltage loss along long runs you will need to put in a new power supply at least every 5 meters. Technically you can power the Raspberry Pi through the GPIO pins and use the same supply as the strips, but I would recommend just using the USB power as it's a much safer option.
+The Raspberry Pi cannot even come close to this so a larger power supply is required, however, due to voltage loss along long runs you will need to put in a new power supply at least every 5 meters. Technically you can power the Raspberry Pi through the GPIO pins and use the same supply as the strips, but I would recommend just using the USB power as it's a much safer option.
 
 Also, while it *should* work without it to be safe you should add a level converter between the Raspberry Pi and the strip's data lines. This will also help you have longer runs.
 
@@ -138,6 +138,7 @@ class LEDStrip:
 		for x in range(self.leds):
 			self.spi.write(self.buffer[x])
 			self.spi.flush()
+		self.spi.write(bytearray(b'\x00\x00\x00')) #zero fill the last to prevent stray colors at the end
 		self.spi.write(bytearray(b'\x00'))
 		self.spi.flush()
 		
