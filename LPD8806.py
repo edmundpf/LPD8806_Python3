@@ -58,7 +58,7 @@ class Color:
 	#gets ColorHSV object
 	def getColorHSV(self):
 		h, s, v = colorsys.rgb_to_hsv(self.R / 255.0, self.G / 255.0, self.B / 255.0)
-		return ColorHSV(h, s, v)
+		return ColorHSV(h * 360, s, v)
 
 	def __str__( self ):
 		return "%d,%d,%d" % (self.R, self.G, self.B)
