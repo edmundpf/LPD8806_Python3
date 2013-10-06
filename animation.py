@@ -22,6 +22,8 @@ class Rainbow(object):
         if self._step > 384:
             self._step = 0
 
+        self._led.update()
+
 
 class RainbowCycle(object):
     """Generate rainbow wheel equally distributed over strip."""
@@ -42,6 +44,7 @@ class RainbowCycle(object):
         self._step += 1
         if self._step > 384:
             self._step = 0
+
         self._led.update()
 
 
@@ -64,6 +67,7 @@ class ColorWipe(object):
         self._step += 1
         if start + self._step > end:
             self._step = 0
+
         self._led.update()
 
 
@@ -88,6 +92,7 @@ class ColorChase(object):
         self._step += 1
         if start + self._step > end:
             self._step = 0
+
         self._led.update()
 
 
@@ -121,14 +126,20 @@ class LarsonScanner(object):
 
         for l in range(1, tl + 1):
             level = (float(tail - l) / float(tail)) * fade
-            self._led.setRGB(self._last + l, color.r * level, color.g * level, color.b * level)
+            self._led.setRGB(self._last + l,
+                             color.r * level,
+                             color.g * level,
+                             color.b * level)
 
         if self._last + tl + 1 <= end:
             self._led.setOff(self._last + tl + 1)
 
         for r in range(1, tr + 1):
             level = (float(tail - r) / float(tail)) * fade
-            self._led.setRGB(self._last - r, color.r * level, color.g * level, color.b * level)
+            self._led.setRGB(self._last - r,
+                             color.r * level,
+                             color.g * level,
+                             color.b * level)
 
         if self._last - tr - 1 >= start:
             self._led.setOff(self._last - tr - 1)
@@ -139,6 +150,7 @@ class LarsonScanner(object):
             self._direction = -self._direction
 
         self._step += self._direction
+
         self._led.update()
 
 
@@ -154,6 +166,7 @@ class LarsonRainbow(LarsonScanner):
 
         super(LarsonRainbow, self).step(
             ColorHSV(hue).get_color_rgb(), tail, fade, start, end)
+
         self._led.update()
 
 
@@ -170,16 +183,20 @@ class Wave(object):
         size = end - start + 1
 
         for i in range(size):
-            y = math.sin(math.pi * float(cycles) * float(self._step * i) / float(size))
+            y = math.sin(
+                math.pi * float(cycles) * float(self._step * i) / float(size))
             if y >= 0.0:
                 # Peaks of sine wave are white
                 y = 1.0 - y  # Translate Y to 0.0 (top) to 1.0 (center)
-                c2 = Color(255 - float(255 - color.r) * y, 255 - float(255 - color.g) * y,
+                c2 = Color(255 - float(255 - color.r) * y,
+                           255 - float(255 - color.g) * y,
                            255 - float(255 - color.b) * y)
             else:
                 # Troughs of sine wave are black
                 y += 1.0  # Translate Y to 0.0 (bottom) to 1.0 (center)
-                c2 = Color(float(color.r) * y, float(color.g) * y, float(color.b) * y)
+                c2 = Color(float(color.r) * y,
+                           float(color.g) * y,
+                           float(color.b) * y)
             self._led.set(start + i, c2)
 
         self._step += 1
