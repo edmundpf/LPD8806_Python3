@@ -142,21 +142,18 @@ class LarsonScanner(object):
         self._led.update()
 
 
-class LarsonRainbow(object):
+class LarsonRainbow(LarsonScanner):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.) but Rainbow."""
-
-    def __init__(self, led):
-        self._led = led
-        self._larson = LarsonScanner(led)
 
     def step(self, tail=2, fade=0.75, start=0, end=0):
         if end == 0 or end > self._led.lastIndex:
             end = self._led.lastIndex
         size = end - start + 1
 
-        hue = (self._larson._step * (360 / size))
+        hue = (self._step * (360 / size))
 
-        self._larson.step(ColorHSV(hue).get_color_rgb(), tail, fade, start, end)
+        super(LarsonRainbow, self).step(
+            ColorHSV(hue).get_color_rgb(), tail, fade, start, end)
         self._led.update()
 
 
