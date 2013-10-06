@@ -24,8 +24,6 @@ class Rainbow(object):
         if self._step > 384:
             self._step = 0
 
-        self._led.update()
-
 
 class RainbowCycle(object):
     """Generate rainbow wheel equally distributed over strip."""
@@ -48,8 +46,6 @@ class RainbowCycle(object):
         self._step += 1
         if self._step > 384:
             self._step = 0
-
-        self._led.update()
 
 
 class ColorWipe(object):
@@ -74,8 +70,6 @@ class ColorWipe(object):
         self._step += 1
         if self._start + self._step > self._end:
             self._step = 0
-
-        self._led.update()
 
 
 class ColorChase(object):
@@ -102,8 +96,6 @@ class ColorChase(object):
         self._step += 1
         if self._start + self._step > self._end:
             self._step = 0
-
-        self._led.update()
 
 
 class LarsonScanner(object):
@@ -166,8 +158,6 @@ class LarsonScanner(object):
 
         self._step += self._direction
 
-        self._led.update()
-
 
 class LarsonRainbow(LarsonScanner):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.) but Rainbow."""
@@ -180,7 +170,6 @@ class LarsonRainbow(LarsonScanner):
         self._color = ColorHSV(self._step * (360 / self._size)).get_color_rgb()
 
         super(LarsonRainbow, self).step()
-        self._led.update()
 
 
 class Wave(object):
@@ -221,4 +210,3 @@ class Wave(object):
             self._led.set(self._start + i, c2)
 
         self._step += 1
-        self._led.update()

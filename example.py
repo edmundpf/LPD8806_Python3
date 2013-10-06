@@ -39,11 +39,13 @@ led.all_off()
 anim = Wave(led, Color(255, 0, 0), 4)
 for i in range(led.lastIndex):
 	anim.step()
+	led.update()
 	sleep(0.15)
 
 anim = Wave(led, Color(0, 0, 100), 2)
 for i in range(led.lastIndex):
 	anim.step()
+	led.update()
 	sleep(0.15)
 
 
@@ -51,6 +53,7 @@ for i in range(led.lastIndex):
 anim = Rainbow(led)
 for i in range(384):
 	anim.step()
+	led.update()
 
 led.fillOff()
 
@@ -58,6 +61,7 @@ led.fillOff()
 anim = RainbowCycle(led)
 for i in range(384*2):
 	anim.step()
+	led.update()
 
 led.fillOff()
 
@@ -74,6 +78,7 @@ for c in range(4):
 
 	for i in range(num):
 		anim.step()
+		led.update()
 		sleep(0.03)
 
 led.fillOff()
@@ -83,6 +88,7 @@ for c in range(4):
 
 	for i in range(num):
 		anim.step()
+		led.update()
 		sleep(0.03)
 
 led.fillOff()
@@ -91,6 +97,7 @@ led.fillOff()
 anim = LarsonScanner(led, Color(255, 0, 0))
 for i in range(led.lastIndex*4):
 	anim.step()
+	led.update()
 	sleep(0.03)
 
 led.fillOff()
@@ -98,6 +105,7 @@ led.fillOff()
 anim = LarsonRainbow(led, 2, 0.5)
 for i in range(led.lastIndex*4):
 	anim.step()
+	led.update()
 	sleep(0.03)
 
 led.all_off()
