@@ -5,18 +5,20 @@ from color import Color, ColorHSV, wheel_color
 class Rainbow(object):
     """Generate rainbow."""
 
-    def __init__(self, led):
+    def __init__(self, led, start=0, end=0):
         self._led = led
+        self._start = start
+        self._end = end
         self._step = 0
 
-    def step(self, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
-        size = end - start + 1
+    def step(self):
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
+        size = self._end - self._start + 1
 
         for i in range(size):
             color = (i + self._step) % 384
-            self._led.set(start + i, wheel_color(color))
+            self._led.set(self._start + i, wheel_color(color))
 
         self._step += 1
         if self._step > 384:
@@ -28,18 +30,20 @@ class Rainbow(object):
 class RainbowCycle(object):
     """Generate rainbow wheel equally distributed over strip."""
 
-    def __init__(self, led):
+    def __init__(self, led, start=0, end=0):
         self._led = led
+        self._start = start
+        self._end = end
         self._step = 0
 
-    def step(self, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
-        size = end - start + 1
+    def step(self):
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
+        size = self._end - self._start + 1
 
         for i in range(size):
             color = (i * (384 / size) + self._step) % 384
-            self._led.set(start + i, wheel_color(color))
+            self._led.set(self._start + i, wheel_color(color))
 
         self._step += 1
         if self._step > 384:
@@ -51,21 +55,24 @@ class RainbowCycle(object):
 class ColorWipe(object):
     """Fill the dots progressively along the strip."""
 
-    def __init__(self, led):
+    def __init__(self, led, color, start=0, end=0):
         self._led = led
+        self._color = color
+        self._start = start
+        self._end = end
         self._step = 0
 
-    def step(self, color, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
+    def step(self):
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
 
         if self._step == 0:
             self._led.fillOff()
 
-        self._led.set(start + self._step, color)
+        self._led.set(self._start + self._step, self._color)
 
         self._step += 1
-        if start + self._step > end:
+        if self._start + self._step > self._end:
             self._step = 0
 
         self._led.update()
@@ -74,23 +81,26 @@ class ColorWipe(object):
 class ColorChase(object):
     """Chase one pixel down the strip."""
 
-    def __init__(self, led):
+    def __init__(self, led, color, start=0, end=0):
         self._led = led
+        self._color = color
+        self._start = start
+        self._end = end
         self._step = 0
 
-    def step(self, color, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
+    def step(self):
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
 
         if self._step == 0:
-            self._led.setOff(end)
+            self._led.setOff(self._end)
         else:
-            self._led.setOff(start + self._step - 1)
+            self._led.setOff(self._start + self._step - 1)
 
-        self._led.set(start + self._step, color)
+        self._led.set(self._start + self._step, self._color)
 
         self._step += 1
-        if start + self._step > end:
+        if self._start + self._step > self._end:
             self._step = 0
 
         self._led.update()
@@ -99,52 +109,57 @@ class ColorChase(object):
 class LarsonScanner(object):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.)."""
 
-    def __init__(self, led):
+    def __init__(self, led, color, tail=2, fade=0.75, start=0, end=0):
         self._led = led
+        self._color = color
+        self._tail = tail
+        self._fade = fade
+        self._start = start
+        self._end = end
+        self._size = end - start + 1
         self._step = 0
         self._direction = -1
         self._last = 0
 
-    def step(self, color, tail=2, fade=0.75, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
-        size = end - start + 1
+    def step(self):
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
 
-        tail += 1  # makes tail math later easier
-        if tail >= size / 2:
-            tail = (size / 2) - 1
+        self._tail += 1  # makes tail math later easier
+        if self._tail >= self._size / 2:
+            self._tail = (self._size / 2) - 1
 
-        self._last = start + self._step
-        self._led.set(self._last, color)
+        self._last = self._start + self._step
+        self._led.set(self._last, self._color)
 
-        tl = tail
-        if self._last + tl > end:
-            tl = end - self._last
-        tr = tail
-        if self._last - tr < start:
-            tr = self._last - start
+        tl = self._tail
+        if self._last + tl > self._end:
+            tl = self._end - self._last
+        tr = self._tail
+        if self._last - tr < self._start:
+            tr = self._last - self._start
 
         for l in range(1, tl + 1):
-            level = (float(tail - l) / float(tail)) * fade
+            level = (float(self._tail - l) / float(self._tail)) * self._fade
             self._led.setRGB(self._last + l,
-                             color.r * level,
-                             color.g * level,
-                             color.b * level)
+                             self._color.r * level,
+                             self._color.g * level,
+                             self._color.b * level)
 
-        if self._last + tl + 1 <= end:
+        if self._last + tl + 1 <= self._end:
             self._led.setOff(self._last + tl + 1)
 
         for r in range(1, tr + 1):
-            level = (float(tail - r) / float(tail)) * fade
+            level = (float(self._tail - r) / float(self._tail)) * self._fade
             self._led.setRGB(self._last - r,
-                             color.r * level,
-                             color.g * level,
-                             color.b * level)
+                             self._color.r * level,
+                             self._color.g * level,
+                             self._color.b * level)
 
-        if self._last - tr - 1 >= start:
+        if self._last - tr - 1 >= self._start:
             self._led.setOff(self._last - tr - 1)
 
-        if start + self._step == end:
+        if self._start + self._step == self._end:
             self._direction = -self._direction
         elif self._step == 0:
             self._direction = -self._direction
@@ -157,47 +172,53 @@ class LarsonScanner(object):
 class LarsonRainbow(LarsonScanner):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.) but Rainbow."""
 
-    def step(self, tail=2, fade=0.75, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
-        size = end - start + 1
+    def __init__(self, led, tail=2, fade=0.75, start=0, end=0):
+        super(LarsonRainbow, self).__init__(
+            led, ColorHSV(0).get_color_rgb(), tail, fade, start, end)
 
-        hue = (self._step * (360 / size))
+    def step(self):
+        self._color = ColorHSV(self._step * (360 / self._size)).get_color_rgb()
 
-        super(LarsonRainbow, self).step(
-            ColorHSV(hue).get_color_rgb(), tail, fade, start, end)
-
+        super(LarsonRainbow, self).step()
         self._led.update()
 
 
 class Wave(object):
     """Sine wave animation."""
 
-    def __init__(self, led):
+    def __init__(self, led, color, cycles, start=0, end=0):
         self._led = led
+        self._color = color
+        self._cycles = cycles
+        self._start = start
+        self._end = end
+        self._size = end - start + 1
         self._step = 0
 
-    def step(self, color, cycles, start=0, end=0):
-        if end == 0 or end > self._led.lastIndex:
-            end = self._led.lastIndex
-        size = end - start + 1
+    def step(self):
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
 
-        for i in range(size):
+        for i in range(self._size):
             y = math.sin(
-                math.pi * float(cycles) * float(self._step * i) / float(size))
+                math.pi *
+                float(self._cycles) *
+                float(self._step * i) /
+                float(self._size))
+
             if y >= 0.0:
                 # Peaks of sine wave are white
                 y = 1.0 - y  # Translate Y to 0.0 (top) to 1.0 (center)
-                c2 = Color(255 - float(255 - color.r) * y,
-                           255 - float(255 - color.g) * y,
-                           255 - float(255 - color.b) * y)
+                c2 = Color(255 - float(255 - self._color.r) * y,
+                           255 - float(255 - self._color.g) * y,
+                           255 - float(255 - self._color.b) * y)
             else:
                 # Troughs of sine wave are black
                 y += 1.0  # Translate Y to 0.0 (bottom) to 1.0 (center)
-                c2 = Color(float(color.r) * y,
-                           float(color.g) * y,
-                           float(color.b) * y)
-            self._led.set(start + i, c2)
+                c2 = Color(float(self._color.r) * y,
+                           float(self._color.g) * y,
+                           float(self._color.b) * y)
+            self._led.set(self._start + i, c2)
 
         self._step += 1
         self._led.update()

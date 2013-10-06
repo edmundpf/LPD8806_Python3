@@ -30,22 +30,20 @@ for c in range(4):
 			dir = -step
 		level += dir
 		sleep(0.005)
-		
+
 led.all_off()
 
 #animations - each animation method moves the animation forward one step on each call
 #after each step, call update() to push it to the LED strip
 #sin wave animations
-color = Color(255, 0, 0)
-anim = Wave(led)
+anim = Wave(led, Color(255, 0, 0), 4)
 for i in range(led.lastIndex):
-	anim.step(color, 4)
+	anim.step()
 	sleep(0.15)
-	
-color = Color(0, 0, 100)
-anim = Wave(led)
+
+anim = Wave(led, Color(0, 0, 100), 2)
 for i in range(led.lastIndex):
-	anim.step(color, 2)
+	anim.step()
 	sleep(0.15)
 
 
@@ -55,7 +53,7 @@ for i in range(384):
 	anim.step()
 
 led.fillOff()
-	
+
 #evenly distributed rainbow
 anim = RainbowCycle(led)
 for i in range(384*2):
@@ -71,34 +69,35 @@ colors = [
 	Color(255, 255, 255),
 ]
 
-anim = ColorWipe(led)
 for c in range(4):
+	anim = ColorWipe(led, colors[c])
+
 	for i in range(num):
-		anim.step(colors[c])
+		anim.step()
 		sleep(0.03)
-	
+
 led.fillOff()
 
-anim = ColorChase(led)
 for c in range(4):
+	anim = ColorChase(led, colors[c])
+
 	for i in range(num):
-		anim.step(colors[c])
+		anim.step()
 		sleep(0.03)
-		
+
 led.fillOff()
 
 #scanner: single color and changing color
-color = Color(255, 0, 0)
-anim = LarsonScanner(led)
+anim = LarsonScanner(led, Color(255, 0, 0))
 for i in range(led.lastIndex*4):
-	anim.step(color)
+	anim.step()
 	sleep(0.03)
 
 led.fillOff()
 
-anim = LarsonRainbow(led)
+anim = LarsonRainbow(led, 2, 0.5)
 for i in range(led.lastIndex*4):
-	anim.step(2, 0.5)
+	anim.step()
 	sleep(0.03)
 
 led.all_off()
