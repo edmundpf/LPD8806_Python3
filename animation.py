@@ -7,8 +7,12 @@ class BaseAnimation(object):
     def __init__(self, led, start, end):
         self._led = led
         self._start = start
+
         self._end = end
-        self._size = end - start + 1
+        if self._end == 0 or self._end > self._led.lastIndex:
+            self._end = self._led.lastIndex
+
+        self._size = self._end - self._start + 1
         self._step = 0
 
     def step(self):
@@ -29,9 +33,6 @@ class Rainbow(BaseAnimation):
         super(Rainbow, self).__init__(led, start, end)
 
     def step(self):
-        if self._end == 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
-
         for i in range(self._size):
             color = (i + self._step) % 384
             self._led.set(self._start + i, wheel_color(color))
@@ -48,9 +49,6 @@ class RainbowCycle(BaseAnimation):
         super(RainbowCycle, self).__init__(led, start, end)
 
     def step(self):
-        if self._end == 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
-
         for i in range(self._size):
             color = (i * (384 / self._size) + self._step) % 384
             self._led.set(self._start + i, wheel_color(color))
@@ -68,9 +66,6 @@ class ColorWipe(BaseAnimation):
         self._color = color
 
     def step(self):
-        if self._end == 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
-
         if self._step == 0:
             self._led.fillOff()
 
@@ -89,9 +84,6 @@ class ColorChase(BaseAnimation):
         self._color = color
 
     def step(self):
-        if self._end == 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
-
         if self._step == 0:
             self._led.setOff(self._end)
         else:
@@ -116,9 +108,6 @@ class LarsonScanner(BaseAnimation):
         self._last = 0
 
     def step(self):
-        if self._end == 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
-
         self._tail += 1  # makes tail math later easier
         if self._tail >= self._size / 2:
             self._tail = (self._size / 2) - 1
@@ -183,9 +172,6 @@ class Wave(BaseAnimation):
         self._cycles = cycles
 
     def step(self):
-        if self._end == 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
-
         for i in range(self._size):
             y = math.sin(
                 math.pi *
