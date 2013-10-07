@@ -10,13 +10,13 @@ class Rainbow(object):
         self._start = start
         self._end = end
         self._step = 0
+        self._size = end - start + 1
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
             self._end = self._led.lastIndex
-        size = self._end - self._start + 1
 
-        for i in range(size):
+        for i in range(self._size):
             color = (i + self._step) % 384
             self._led.set(self._start + i, wheel_color(color))
 
@@ -33,14 +33,14 @@ class RainbowCycle(object):
         self._start = start
         self._end = end
         self._step = 0
+        self._size = end - start + 1
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
             self._end = self._led.lastIndex
-        size = self._end - self._start + 1
 
-        for i in range(size):
-            color = (i * (384 / size) + self._step) % 384
+        for i in range(self._size):
+            color = (i * (384 / self._size) + self._step) % 384
             self._led.set(self._start + i, wheel_color(color))
 
         self._step += 1
