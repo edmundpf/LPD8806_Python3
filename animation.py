@@ -2,15 +2,20 @@ import math
 from color import Color, ColorHSV, wheel_color
 
 
-class Rainbow(object):
-    """Generate rainbow."""
-
-    def __init__(self, led, start=0, end=0):
+class BaseAnimation(object):
+    def __init__(self, led, start, end):
         self._led = led
         self._start = start
         self._end = end
-        self._step = 0
         self._size = end - start + 1
+        self._step = 0
+
+
+class Rainbow(BaseAnimation):
+    """Generate rainbow."""
+
+    def __init__(self, led, start=0, end=0):
+        super(Rainbow, self).__init__(led, start, end)
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
@@ -25,15 +30,11 @@ class Rainbow(object):
             self._step = 0
 
 
-class RainbowCycle(object):
+class RainbowCycle(BaseAnimation):
     """Generate rainbow wheel equally distributed over strip."""
 
     def __init__(self, led, start=0, end=0):
-        self._led = led
-        self._start = start
-        self._end = end
-        self._step = 0
-        self._size = end - start + 1
+        super(RainbowCycle, self).__init__(led, start, end)
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
@@ -48,15 +49,12 @@ class RainbowCycle(object):
             self._step = 0
 
 
-class ColorWipe(object):
+class ColorWipe(BaseAnimation):
     """Fill the dots progressively along the strip."""
 
     def __init__(self, led, color, start=0, end=0):
-        self._led = led
+        super(ColorWipe, self).__init__(led, start, end)
         self._color = color
-        self._start = start
-        self._end = end
-        self._step = 0
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
@@ -72,15 +70,12 @@ class ColorWipe(object):
             self._step = 0
 
 
-class ColorChase(object):
+class ColorChase(BaseAnimation):
     """Chase one pixel down the strip."""
 
     def __init__(self, led, color, start=0, end=0):
-        self._led = led
+        super(ColorChase, self).__init__(led, start, end)
         self._color = color
-        self._start = start
-        self._end = end
-        self._step = 0
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
@@ -98,18 +93,14 @@ class ColorChase(object):
             self._step = 0
 
 
-class LarsonScanner(object):
+class LarsonScanner(BaseAnimation):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.)."""
 
     def __init__(self, led, color, tail=2, fade=0.75, start=0, end=0):
-        self._led = led
+        super(LarsonScanner, self).__init__(led, start, end)
         self._color = color
         self._tail = tail
         self._fade = fade
-        self._start = start
-        self._end = end
-        self._size = end - start + 1
-        self._step = 0
         self._direction = -1
         self._last = 0
 
@@ -172,17 +163,13 @@ class LarsonRainbow(LarsonScanner):
         super(LarsonRainbow, self).step()
 
 
-class Wave(object):
+class Wave(BaseAnimation):
     """Sine wave animation."""
 
     def __init__(self, led, color, cycles, start=0, end=0):
-        self._led = led
+        super(Wave, self).__init__(led, start, end)
         self._color = color
         self._cycles = cycles
-        self._start = start
-        self._end = end
-        self._size = end - start + 1
-        self._step = 0
 
     def step(self):
         if self._end == 0 or self._end > self._led.lastIndex:
