@@ -19,3 +19,5 @@ Download, extract, then run the help:
  - These strips can get extremely bright (the above video was filmed using 50% brightness) so you can use setMasterBrightness() to set a global level which all output values are multiplied by. This way you don't have to manually modify all of the RGB values to adjust the levels. However, Color takes an optional brightness value so that it can be set on an individual level. Last, if using HSV, you can just set it's "Value" component to adjust the brightness level.
  
  - ColorHSV is there for easily fading through a natural color progression. However, all methods take a Color object, so call ColorHSV.get_color_rgb() before passing to any of the set, fill, or animation methods.
+
+ - You need the `spi_bcm2708` and `spidev` kernel modules loaded to generate the SPI device this is expecting.

@@ -47,7 +47,7 @@ class LEDStrip:
 		
 		self.c_order = ChannelOrder.GRB
 		self.dev = dev
-		self.spi = file(self.dev, "wb")
+		self.spi = open(self.dev, "wb")
 		self.leds = leds
 		self.lastIndex = self.leds - 1
 		self.gamma = bytearray(256)
