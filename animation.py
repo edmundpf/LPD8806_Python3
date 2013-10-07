@@ -1,4 +1,5 @@
 import math
+import time
 from color import Color, ColorHSV, wheel_color
 
 
@@ -9,6 +10,16 @@ class BaseAnimation(object):
         self._end = end
         self._size = end - start + 1
         self._step = 0
+
+    def step(self):
+        raise RuntimeError("Base class step() called. This shouldn't happen")
+
+    def run(self, sleep=None):
+        while True:
+            self.step()
+            self._led.update()
+            if sleep:
+                time.sleep(sleep)
 
 
 class Rainbow(BaseAnimation):
