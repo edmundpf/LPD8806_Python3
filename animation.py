@@ -102,16 +102,16 @@ class LarsonScanner(BaseAnimation):
     def __init__(self, led, color, tail=2, fade=0.75, start=0, end=0):
         super(LarsonScanner, self).__init__(led, start, end)
         self._color = color
-        self._tail = tail
+
+        self._tail = tail + 1  # makes tail math later easier
+        if self._tail >= self._size / 2:
+            self._tail = (self._size / 2) - 1
+
         self._fade = fade
         self._direction = -1
         self._last = 0
 
     def step(self):
-        self._tail += 1  # makes tail math later easier
-        if self._tail >= self._size / 2:
-            self._tail = (self._size / 2) - 1
-
         self._last = self._start + self._step
         self._led.set(self._last, self._color)
 
