@@ -30,6 +30,12 @@ local.properties
 
 
 #################
+# IDEA / PyCharm
+#################
+
+.idea
+
+#################
 ## Visual Studio
 #################
 
