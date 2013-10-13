@@ -57,8 +57,8 @@ class LEDStrip:
             import spidev
             self.spi = spidev.SpiDev()
             self.spi.open(0,0)
-            self.spi.max_speed_hz = 16000000
-            #print 'py-spidev Hz: %d' % (self.spi.max_speed_hz / 1000000)
+            #self.spi.max_speed_hz = 16000000
+            print 'py-spidev Hz: %d' % (self.spi.max_speed_hz / 1000000)
         else:
             self.spi = open(self.dev, "wb")
 

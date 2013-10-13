@@ -1,13 +1,12 @@
 import math
 import time
-from color import Color, ColorHSV, wheel_color
+from color import *
 
 
 class BaseAnimation(object):
     def __init__(self, led, start, end):
         self._led = led
         self._start = start
-
         self._end = end
         if self._end == 0 or self._end > self._led.lastIndex:
             self._end = self._led.lastIndex
@@ -18,13 +17,14 @@ class BaseAnimation(object):
     def step(self):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
-    def run(self, sleep=None):
-        while True:
+    def run(self, sleep=None, max_steps = 0):
+        cur_step = 0
+        while max_steps == 0 or cur_step < max_steps:
             self.step()
             self._led.update()
             if sleep:
                 time.sleep(sleep)
-
+            cur_step += 1
 
 class Rainbow(BaseAnimation):
     """Generate rainbow."""
@@ -57,6 +57,29 @@ class RainbowCycle(BaseAnimation):
         if self._step > 384:
             self._step = 0
 
+class ColorPattern(BaseAnimation):
+    """Fill the dots progressively along the strip with alternating colors."""
+
+    def __init__(self, led, colors, width, dir = True, start=0, end=0):
+        super(ColorPattern, self).__init__(led, start, end)
+        self._colors = colors
+        self._colorCount = len(colors)
+        self._width = width
+        self._total_width = self._width * self._colorCount;
+        self._dir = dir
+
+    def step(self):
+        for i in range(self._size):
+            cIndex = ((i+self._step) % self._total_width) / self._width;
+            self._led.set(self._start + i, self._colors[cIndex])
+        if self._dir:
+            self._step += 1
+            if self._start + self._step > self._end:
+                self._step = 0
+        else:
+            self._step -= 1
+            if self._step < 0:
+                self._step = self._end
 
 class ColorWipe(BaseAnimation):
     """Fill the dots progressively along the strip."""

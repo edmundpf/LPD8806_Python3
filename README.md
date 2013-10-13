@@ -15,6 +15,7 @@ It will load a menu with a blue background. Arrow down to option 8, "Advanced Op
 
 Next, wiring your LPD8806 strips.
 Connect as follows:
+
 	Pi MOSI -> Strand DI
 	Pi SCLK -> Strand CI
 
@@ -22,6 +23,15 @@ Most strips use around 10W per meter (for ~32 LEDs/m) or 2A at 5V.
 The Raspberry Pi cannot even come close to this so a larger power supply is required, however, due to voltage loss along long runs you will need to put in a new power supply at least every 5 meters. Technically you can power the Raspberry Pi through the GPIO pins and use the same supply as the strips, but I would recommend just using the USB power as it's a much safer option.
 
 Also, while it *should* work without it to be safe you should add a level converter between the Raspberry Pi and the strip's data lines. This will also help you have longer runs.
+
+In some cases, using py-spidev can have better performance. To install, run the following commands:
+
+	sudo apt-get install python-dev
+	git clone https://github.com/doceme/py-spidev.git
+	cd py-spidev/
+	sudo python setup.py install
+
+Then set the second parameter of LEDStrip to True to enable py-spidev
 
 Assuming your Raspberry Pi has a connection to the internet, run the following. 
 
@@ -46,8 +56,9 @@ The library contains a number of animations. Below is a list of animations avail
 * Rainbow
 * Color Wipe
 * Color Chase
-* Larson Scanner (CyLon Eye)
+* Larson Scanner (Cylon Eye, K.I.T.T)
 * Wave
+* Color Pattern
 
 
 More Info

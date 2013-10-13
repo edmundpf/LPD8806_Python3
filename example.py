@@ -64,7 +64,7 @@ for c in range(4):
 		if(level >= 0.99):
 			dir = -step
 		level += dir
-		sleep(0.005)
+		#sleep(0.005)
 
 led.all_off()
 
@@ -75,13 +75,13 @@ anim = Wave(led, Color(255, 0, 0), 4)
 for i in range(led.lastIndex):
 	anim.step()
 	led.update()
-	sleep(0.15)
+	#sleep(0.15)
 
 anim = Wave(led, Color(0, 0, 100), 2)
 for i in range(led.lastIndex):
 	anim.step()
 	led.update()
-	sleep(0.15)
+	#sleep(0.15)
 
 
 #rolling rainbow
@@ -114,7 +114,7 @@ for c in range(4):
 	for i in range(num):
 		anim.step()
 		led.update()
-		sleep(0.03)
+		#sleep(0.03)
 
 led.fillOff()
 
@@ -124,7 +124,7 @@ for c in range(4):
 	for i in range(num):
 		anim.step()
 		led.update()
-		sleep(0.03)
+		#sleep(0.03)
 
 led.fillOff()
 
@@ -133,7 +133,7 @@ anim = LarsonScanner(led, Color(255, 0, 0))
 for i in range(led.lastIndex*4):
 	anim.step()
 	led.update()
-	sleep(0.03)
+	#sleep(0.03)
 
 led.fillOff()
 
@@ -141,7 +141,7 @@ anim = LarsonRainbow(led, 2, 0.5)
 for i in range(led.lastIndex*4):
 	anim.step()
 	led.update()
-	sleep(0.03)
+	#sleep(0.03)
 
 led.all_off()
 

@@ -4,7 +4,7 @@ from time import sleep
 import time
 from LPD8806 import *
 
-num = 240;
+num = 36*5*2;
 led = LEDStrip(num, False)
 led.setChannelOrder(ChannelOrder.BRG)
 
