@@ -60,11 +60,12 @@ class RainbowCycle(BaseAnimation):
 class ColorPattern(BaseAnimation):
     """Fill the dots progressively along the strip with alternating colors."""
 
-    def __init__(self, led, colors, width, dir = True, start=0, end=0):
+    def __init__(self, led, colors, width, step_size = 1, dir = True, start=0, end=0):
         super(ColorPattern, self).__init__(led, start, end)
         self._colors = colors
         self._colorCount = len(colors)
         self._width = width
+        self._step_size = step_size
         self._total_width = self._width * self._colorCount;
         self._dir = dir
 
@@ -73,11 +74,11 @@ class ColorPattern(BaseAnimation):
             cIndex = ((i+self._step) % self._total_width) / self._width;
             self._led.set(self._start + i, self._colors[cIndex])
         if self._dir:
-            self._step += 1
+            self._step += self._step_size
             if self._start + self._step > self._end:
                 self._step = 0
         else:
-            self._step -= 1
+            self._step -= self._step_size
             if self._step < 0:
                 self._step = self._end
 

@@ -96,8 +96,15 @@ class LEDStrip:
             for x in range(self.leds):
                 self.spi.write(self.buffer[x])
                 self.spi.flush()
+            #seems that the more lights we have the more you have to push zeros
+            #not 100% sure why this is yet, but it seems to work
             self.spi.write(bytearray(b'\x00\x00\x00')) #zero fill the last to prevent stray colors at the end
-            self.spi.write(bytearray(b'\x00'))
+            self.spi.flush()
+            self.spi.write(bytearray(b'\x00\x00\x00'))
+            self.spi.flush()
+            self.spi.write(bytearray(b'\x00\x00\x00'))
+            self.spi.flush()
+            self.spi.write(bytearray(b'\x00\x00\x00'))
             self.spi.flush()
         
     #Fill the strand (or a subset) with a single color using a Color object

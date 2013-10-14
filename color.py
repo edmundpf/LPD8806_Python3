@@ -96,8 +96,8 @@ def wheel_color(position):
 class SysColors:
     white = Color(255, 255, 255)
     white75 = Color(255, 255, 255, 0.75)
-    white75 = Color(255, 255, 255, 0.5)
-    white75 = Color(255, 255, 255, 0.25)
+    white50 = Color(255, 255, 255, 0.5)
+    white25 = Color(255, 255, 255, 0.25)
 
     off = Color(0, 0, 0);
 
