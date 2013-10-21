@@ -26,6 +26,7 @@ class Color:
    
 def color_hex(hex):
     """Helper for converting RGB and RGBA hex values to Color"""
+    hex = hex.strip('#')
     if len(hex) == 6:
         split = (hex[0:2],hex[2:4],hex[4:6])
     elif len(hex) == 8:
