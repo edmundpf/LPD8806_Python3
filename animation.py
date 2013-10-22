@@ -41,7 +41,6 @@ class Rainbow(BaseAnimation):
         if self._step > 384:
             self._step = 0
 
-
 class RainbowCycle(BaseAnimation):
     """Generate rainbow wheel equally distributed over strip."""
 
@@ -99,7 +98,6 @@ class ColorWipe(BaseAnimation):
         if self._start + self._step > self._end:
             self._step = 0
 
-
 class ColorChase(BaseAnimation):
     """Chase one pixel down the strip."""
 
@@ -118,7 +116,6 @@ class ColorChase(BaseAnimation):
         self._step += 1
         if self._start + self._step > self._end:
             self._step = 0
-
 
 class LarsonScanner(BaseAnimation):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.)."""
@@ -173,7 +170,6 @@ class LarsonScanner(BaseAnimation):
 
         self._step += self._direction
 
-
 class LarsonRainbow(LarsonScanner):
     """Larson scanner (i.e. Cylon Eye or K.I.T.T.) but Rainbow."""
 
@@ -185,7 +181,6 @@ class LarsonRainbow(LarsonScanner):
         self._color = ColorHSV(self._step * (360 / self._size)).get_color_rgb()
 
         super(LarsonRainbow, self).step()
-
 
 class Wave(BaseAnimation):
     """Sine wave animation."""
