@@ -24,6 +24,7 @@ class BaseAnimation(object):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def run(self, amt = 1, sleep=None, max_steps = 0):
+        self._step = 0
         cur_step = 0
         while max_steps == 0 or cur_step < max_steps:
             self._timeRef = self.__msTime()

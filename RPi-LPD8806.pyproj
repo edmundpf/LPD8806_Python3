@@ -5,7 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>8569c698-ebb9-4e61-8056-fafae4dd5296</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>RPi_LPD8806.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +23,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="RPi_LPD8806.py" />
+    <Compile Include="animation.py" />
+    <Compile Include="bootstrap.py" />
+    <Compile Include="color.py" />
+    <Compile Include="example.py" />
+    <Compile Include="halloween.py" />
+    <Compile Include="LPD8806.py" />
+    <Compile Include="off.py" />
+    <Compile Include="speedtest.py" />
+    <Compile Include="test.py" />
+    <Compile Include="util.py" />
+    <Compile Include="__init__.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>
