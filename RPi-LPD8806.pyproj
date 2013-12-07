@@ -30,6 +30,7 @@
     <Compile Include="halloween.py" />
     <Compile Include="LPD8806.py" />
     <Compile Include="off.py" />
+    <Compile Include="setup.py" />
     <Compile Include="speedtest.py" />
     <Compile Include="test.py" />
     <Compile Include="util.py" />
