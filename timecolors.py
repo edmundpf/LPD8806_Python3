@@ -1,3 +1,7 @@
+#used by RGBClock animation
+#a purely mathematical color distribution is un-even: red shows for far too little and greens/blues for far too long
+#these arrays have been chosen specifically to give a more even rainbow distribution
+
 _hourColors = [
 (255, 0, 0), #645
 (255, 33, 0), #640

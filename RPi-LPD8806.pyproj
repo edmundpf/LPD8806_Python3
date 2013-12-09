@@ -33,6 +33,7 @@
     <Compile Include="setup.py" />
     <Compile Include="speedtest.py" />
     <Compile Include="test.py" />
+    <Compile Include="timecolors.py" />
     <Compile Include="util.py" />
     <Compile Include="__init__.py" />
   </ItemGroup>
