@@ -61,8 +61,9 @@ class Rainbow(BaseAnimation):
             self._led.set(self._start + i, wheel_color(color))
 
         self._step += amt
-        if self._step > 384:
-            self._step = 0
+        overflow = self._step - 384
+        if overflow >= 0:
+            self._step = overflow
 
 class RainbowCycle(BaseAnimation):
     """Generate rainbow wheel equally distributed over strip."""
@@ -76,8 +77,9 @@ class RainbowCycle(BaseAnimation):
             self._led.set(self._start + i, wheel_color(color))
 
         self._step += amt
-        if self._step > 384:
-            self._step = 0
+        overflow = self._step - 384
+        if overflow >= 0:
+            self._step = overflow
 
 class ColorPattern(BaseAnimation):
     """Fill the dots progressively along the strip with alternating colors."""
@@ -96,12 +98,13 @@ class ColorPattern(BaseAnimation):
             self._led.set(self._start + i, self._colors[cIndex])
         if self._dir:
             self._step += amt
-            if self._start + self._step > self._end:
-                self._step = 0
+            overflow = (self._start + self._step) - self._end
+            if overflow >= 0:
+                self._step = overflow
         else:
             self._step -= amt
             if self._step < 0:
-                self._step = self._end
+                self._step = self._end + self._step
 
 class ColorWipe(BaseAnimation):
     """Fill the dots progressively along the strip."""
@@ -117,8 +120,9 @@ class ColorWipe(BaseAnimation):
             self._led.set(self._start + self._step - i, self._color)
 
         self._step += amt
-        if self._start + self._step > self._end:
-            self._step = 0
+        overflow = (self._start + self._step) - self._end
+        if overflow >= 0:
+            self._step = overflow
 
 class ColorFade(BaseAnimation):
     """Fill the dots progressively along the strip."""
@@ -159,8 +163,9 @@ class ColorChase(BaseAnimation):
             self._led.set(self._start + self._step + i, self._color)
 
         self._step += amt
-        if self._start + self._step > self._end:
-            self._step = 0
+        overflow = (self._start + self._step) - self._end
+        if overflow >= 0:
+            self._step = overflow
 
 class PartyMode(BaseAnimation):
     """Stobe Light Effect."""

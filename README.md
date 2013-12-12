@@ -24,7 +24,7 @@ The Raspberry Pi cannot even come close to this so a larger power supply is requ
 
 Also, while it *should* work without it to be safe you should add a level converter between the Raspberry Pi and the strip's data lines. This will also help you have longer runs.
 
-In some cases, using py-spidev can have better performance. To install, run the following commands:
+In some cases, using py-spidev can have better performance but is compeltely optional. To install, run the following commands:
 
 	sudo apt-get install python-dev
 	git clone https://github.com/doceme/py-spidev.git
@@ -37,13 +37,14 @@ Assuming your Raspberry Pi has a connection to the internet, run the following.
 
     git clone https://github.com/adammhaile/RPi-LPD8806.git
     cd RPi-LPD8806
+	python setup.py install
     python example.py
     
 You should see your LED strip run through a number of animations. 
 
 Here is a basic program that will fill the entire strip red
 
-    from LPD8806 import *
+    from raspledstrip.ledstrip import *
     led = LEDStrip(32)
     led.fillRGB(255,0,0)
     led.update()

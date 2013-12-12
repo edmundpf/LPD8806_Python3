@@ -6,8 +6,8 @@ and checks needed by any script
 """
 
 from time import sleep
-from LPD8806 import *
-from animation import *
+from raspledstrip.ledstrip import *
+from raspledstrip.animation import *
 
 import os.path
 import sys
@@ -44,6 +44,6 @@ sudo chmod a+rw /dev/spidev0.0
 
 num = 36 * 10;
 led = LEDStrip(num)
-led.setChannelOrder(ChannelOrder.BRG) #Only use this if your strip does not use the GRB order
+#led.setChannelOrder(ChannelOrder.BRG) #Only use this if your strip does not use the GRB order
 #led.setMasterBrightness(0.5) #use this to set the overall max brightness of the strip
 led.all_off()
