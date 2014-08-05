@@ -4,14 +4,14 @@ from LPD8806 import LPD8806
 
 #Not all LPD8806 strands are created equal.
 #Some, like Adafruit's use GRB order and the other common order is GRB
-#Library defaults to GRB but you can call strand.setChannelOrder(ChannelOrder) 
+#Library defaults to GRB but you can call strand.setChannelOrder(ChannelOrder)
 #to set the order your strands use
 class ChannelOrder:
     RGB = [0,1,2] #Probably not used, here for clarity
-    
+
     GRB = [1,0,2] #Strands from Adafruit and some others (default)
     BRG = [1,2,0] #Strands from many other manufacturers
-        
+
 
 class LEDStrip:
 
@@ -19,7 +19,7 @@ class LEDStrip:
         #Variables:
         #	leds -- strand size
         #	dev -- spi device
-        
+
         #no alternate drivers for now. Here so they can be added later
         self.driver = LPD8806(leds, use_py_spi, dev)
 
@@ -28,7 +28,7 @@ class LEDStrip:
         self.lastIndex = self.leds - 1
         self.gamma = bytearray(256)
         self.buffer = [0 for x in range(self.leds + 1)]
-        
+
         self.masterBrightness = 1.0
 
         for led in range(self.leds):
@@ -46,36 +46,36 @@ class LEDStrip:
     #Allows for easily using LED strands with different channel orders
     def setChannelOrder(self, order):
         self.c_order = order
-    
+
     #Set the master brightness for the LEDs 0.0 - 1.0
     def setMasterBrightness(self, bright):
         if(bright > 1.0 or bright < 0.0):
             raise ValueError('Brightness must be between 0.0 and 1.0')
         self.masterBrightness = bright
-        
+
     #Fill the strand (or a subset) with a single color using a Color object
-    def fill(self, color, start=0, end=0):
+    def fill(self, color, start=0, end=-1):
         if start < 0:
             start = 0
-        if end == 0 or end > self.lastIndex:
+        if end < 0 or end > self.lastIndex:
             end = self.lastIndex
         for led in range(start, end + 1): #since 0-index include end in range
             self.__set_internal(led, color)
 
     #Fill the strand (or a subset) with a single color using RGB values
-    def fillRGB(self, r, g, b, start=0, end=0):
+    def fillRGB(self, r, g, b, start=0, end=-1):
         self.fill(Color(r, g, b), start, end)
-        
+
     #Fill the strand (or a subset) with a single color using HSV values
-    def fillHSV(self, h, s, v, start=0, end=0):
+    def fillHSV(self, h, s, v, start=0, end=-1):
         self.fill(ColorHSV(h, s, v).get_color_rgb(), start, end)
 
-    #Fill the strand (or a subset) with a single color using a Hue value. 
+    #Fill the strand (or a subset) with a single color using a Hue value.
     #Saturation and Value components of HSV are set to max.
-    def fillHue(self, hue, start=0, end=0):
+    def fillHue(self, hue, start=0, end=-1):
         self.fill(ColorHSV(hue).get_color_rgb(), start, end)
-        
-    def fillOff(self, start=0, end=0):
+
+    def fillOff(self, start=0, end=-1):
         self.fillRGB(0, 0, 0, start, end)
 
     #internal use only. sets pixel color
@@ -95,7 +95,7 @@ class LEDStrip:
     def setRGB(self, pixel, r, g, b):
         color = Color(r, g, b)
         self.set(pixel, color)
-        
+
     #Set single pixel to HSV value
     def setHSV(self, pixel, h, s, v):
         self.set(pixel, ColorHSV(h, s, v).get_color_rgb())
@@ -104,7 +104,7 @@ class LEDStrip:
     #Saturation and Value components of HSV are set to max.
     def setHue(self, pixel, hue):
         self.set(pixel, ColorHSV(hue).get_color_rgb())
-        
+
     #turns off the desired pixel
     def setOff(self, pixel):
         self.setRGB(pixel, 0, 0, 0)
@@ -115,4 +115,3 @@ class LEDStrip:
         self.update()
         self.fillOff()
         self.update()
-
