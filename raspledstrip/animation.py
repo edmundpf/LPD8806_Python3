@@ -1,7 +1,7 @@
 import math
 import time
-from color import *
-import util
+from .color import *
+from . import util
 import random
 
 class BaseAnimation(object):
@@ -34,7 +34,7 @@ class BaseAnimation(object):
                 diff = (self.__msTime() - self._timeRef)
                 t = max(0, (sleep - diff) / 1000.0)
                 if t == 0:
-                    print "Timeout of %dms is less than the minimum of %d!" % (sleep, diff)
+                    print("Timeout of %dms is less than the minimum of %d!" % (sleep, diff))
                 time.sleep(t)
             cur_step += 1
 
@@ -316,7 +316,7 @@ class Wave(BaseAnimation):
 
 
 import time
-import timecolors
+from . import timecolors
 class RGBClock(BaseAnimation):
     """RGB Clock done with RGB LED strip(s)"""
 

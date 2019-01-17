@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from color import Color, ColorHSV
-from LPD8806 import LPD8806
+from .color import Color, ColorHSV
+from .LPD8806 import LPD8806
 
 #Not all LPD8806 strands are created equal.
 #Some, like Adafruit's use GRB order and the other common order is GRB
@@ -36,7 +36,7 @@ class LEDStrip:
         for i in range(256):
             # Color calculations from
             # http://learn.adafruit.com/light-painting-with-raspberry-pi
-            self.gamma[i] = 0x80 | int(
+            self.gamma[i] = 0x00 | int(
                 pow(float(i) / 255.0, 2.5) * 127.0 + 0.5
             )
 

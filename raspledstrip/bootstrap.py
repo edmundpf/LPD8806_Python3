@@ -6,8 +6,8 @@ and checks needed by any script
 """
 
 from time import sleep
-from raspledstrip.ledstrip import *
-from raspledstrip.animation import *
+from .ledstrip import *
+from .animation import *
 
 import os.path
 import sys

@@ -11,7 +11,7 @@ class LPD8806(object):
             self.spi = spidev.SpiDev()
             self.spi.open(0,0)
             self.spi.max_speed_hz = 12000000
-            print 'py-spidev MHz: %d' % (self.spi.max_speed_hz / 1000000.0 )
+            print('py-spidev MHz: %d' % (self.spi.max_speed_hz / 1000000.0 ))
         else:
             self.spi = open(self.dev, "wb")
 
