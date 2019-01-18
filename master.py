@@ -88,6 +88,7 @@ class Display:
 				init_args = self.presets(init_args)
 
 			for i in range(0, len(init_args)):
+				print(init_args[i])
 				for key in args:
 					if init_args[i] in args[key]:
 						if (i + 1) < len(init_args):
