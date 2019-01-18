@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+import time
 import datetime
 import colorful
 from raspledstrip.bootstrap import *
@@ -129,8 +130,74 @@ class Display:
 		printLog(colorful.bold_orange('CONFIG: ') + str(self.config))
 		printSuccess('Unloaded JSON config file.')
 
+	#: Do actions
+
+	def doActions(self):
+
+		for i in range(0, self.config):
+
+			if action == 'off':
+				printLog(colorful.bold_purple("Turning Pi LED's off..."))
+				loop_itt = -1
+				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
+				while loop_bool == True:
+					led.all_off()
+					if self.config[i]['duration'] != 0:
+						printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
+						time.sleep(self.config[i]['duration'])
+					if loop_itt == -1:
+						loop_itt += 2
+					elif self.config[i]['loops'] > -1:
+						loop_itt += 1
+					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+
+			elif action == 'color':
+				loop_itt = -1
+				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
+				while loop_bool == True:
+					self.config[i]['args']['color'] = self.args[i]
+					led.fill(color_hex(self.config[i]['args']['color']))
+					led.update()
+					if self.config[i]['duration'] != 0:
+						printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
+						time.sleep(self.config[i]['duration'])
+					if loop_itt == -1:
+						loop_itt += 2
+					elif self.config[i]['loops'] > -1:
+						loop_itt += 1
+					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+
+			elif action == 'rainbow':
+				loop_itt = -1
+				anim = Rainbow(led)
+				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
+				while loop_bool == True:
+					anim.step()
+					led.update()
+					if self.config[i]['duration'] != 0:
+						printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
+						time.sleep(self.config[i]['duration'])
+					if loop_itt == -1:
+						loop_itt += 2
+					elif self.config[i]['loops'] > -1:
+						loop_itt += 1
+					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+		printSuccess('Actions completed.')	
+
+	#: Loop Logic		
+
+	def loopLogic(self, itt, val):
+
+		if val == -1:
+			return 'Infinite', True
+		elif val != -1 and itt < val:
+			return str(max(val - itt, 0)), True
+		elif val != -1 and itt >= val:
+			return '0', False
+		
 #:::DRIVER:::
 
 main = Display()
+main.doActions()
 
 #:::END PROGRAM:::

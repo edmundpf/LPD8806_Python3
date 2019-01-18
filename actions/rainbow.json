@@ -1,11 +1,8 @@
-{
-	"actions": 
-	[
-		{
-			"duration": 0,
-			"loops": -1,
-			"action": "rainbow",
-			"args": {}
-		}
-	]
-}
+[
+	{
+		"duration": 0,
+		"loops": -1,
+		"action": "rainbow",
+		"args": {}
+	}
+]

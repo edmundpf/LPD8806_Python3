@@ -1,11 +1,8 @@
-{
-	"actions": 
-	[
-		{
-			"duration": 0,
-			"loops": 0,
-			"action": "off",
-			"args": {}
-		}
-	]
-}
+[
+	{
+		"duration": 0,
+		"loops": 0,
+		"action": "off",
+		"args": {}
+	}
+]
