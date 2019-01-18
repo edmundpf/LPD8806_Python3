@@ -1,0 +1,14 @@
+[
+	{
+		"duration": 4,
+		"loops": 2,
+		"action": "color",
+		"args": {"color": "A833FF"}
+	},
+	{
+		"duration": 6,
+		"loops": 1,
+		"action": "color",
+		"args": {"color": "33FF8D"}
+	}
+]
