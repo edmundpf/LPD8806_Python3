@@ -171,7 +171,6 @@ class Display:
 						loop_itt += 1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
-				led.all_off()
 
 			elif self.config[i]['action'] == 'rainbow':
 				loop_itt = -1
@@ -189,7 +188,8 @@ class Display:
 						loop_itt += 1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
-				led.all_off()
+
+		led.all_off() 
 
 		printSuccess('Actions completed.')	
 
