@@ -16,6 +16,7 @@
 ``` bash
 git clone git@github.com:edmundpf/LPD8806_Python3.git
 cd LPD8806_Python3/
+pip3 install -r requirements.txt
 ```
 
 ## Install CLI
