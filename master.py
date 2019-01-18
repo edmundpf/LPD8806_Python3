@@ -80,7 +80,12 @@ class Display:
 					'loops': ['-l', '--loops'],
 					'args': ['-a', '--args']}
 
+			presets = ['--off', '--color', '--rainbow']
+
 			print_args = []
+
+			if init_args[0] in presets:
+				init_args = self.presets(init_args)
 
 			for i in range(0, len(init_args)):
 				for key in args:
@@ -242,7 +247,22 @@ class Display:
 			return str(max(val - itt, 0)), True
 		elif val != -1 and itt >= val:
 			return '0', False
-		
+
+	#: Presets
+
+	def presets(self, init_args):
+
+		if init_args[0] == '--off':
+			return ['-f', 'actions/off.json']
+		elif init_args[0] == '--color':
+			if len(init_args) > 1:
+				return ['-f', 'actions/color.json', '-l', '-1', '-a', init_args[1]]
+			else:
+				printError('Invalid color preset.')
+				printExit('Invalid arguments.')
+				sys.exit()
+		elif init_args[0] == '--rainbow':
+			return ['-f', 'actions/rainbow.json']
 #:::DRIVER:::
 
 main = Display()
