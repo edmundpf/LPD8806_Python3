@@ -81,6 +81,7 @@ led -f actions/rainbow.json
   * --color
     * Sets LED's a static color until keyboard interrupt
     * `led --color 00FF00`
+    * Alternatively, choose preset colors listed in _/raspledstrip/colorPresets.py_ `led --color RED`
   * --rainbow
     * Plays rainbow animation unti keyboard interrupt
     * `led --rainbow`
