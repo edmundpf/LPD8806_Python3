@@ -18,7 +18,7 @@ colorful.use_style('monokai')
 
 def printLog(text):
 
-	print(colorful.bold(datetime.datetime.now().strftime("%m/%d/%Y-%H:%M")) + ' ' + text)
+	print(colorful.bold(datetime.datetime.now().strftime("%m/%d/%Y-%H:%M:%S")) + ' ' + text)
 
 #: Print error message
 
@@ -270,7 +270,7 @@ class Display:
 		elif init_args[1] == '--rainbow':
 			printSuccess('Loading rainbow preset.')
 			return ['master.py', '-f', 'actions/rainbow.json']
-			
+
 #:::DRIVER:::
 
 main = Display()
