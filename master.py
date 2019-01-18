@@ -165,7 +165,8 @@ class Display:
 				loop_itt = -1
 				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 				while loop_bool == True:
-					self.config[i]['args']['color'] = self.args[i]
+					if 'args' in self.__dict__ and 'color' in self.args:
+						self.config[i]['args']['color'] = self.args[i]
 					led.fill(color_hex(self.config[i]['args']['color']))
 					led.update()
 					if self.config[i]['duration'] != 0:
