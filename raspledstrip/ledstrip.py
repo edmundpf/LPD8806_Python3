@@ -23,7 +23,7 @@ class LEDStrip:
         #no alternate drivers for now. Here so they can be added later
         self.driver = LPD8806(leds, use_py_spi, dev)
 
-        self.c_order = ChannelOrder.GRB
+        self.c_order = ChannelOrder.RGB
         self.leds = leds
         self.lastIndex = self.leds - 1
         self.gamma = bytearray(256)
