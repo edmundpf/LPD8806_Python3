@@ -136,7 +136,7 @@ class Display:
 
 		for i in range(0, len(self.config)):
 
-			if len(self.config) == 0 and 'duration' in self.__dict__:
+			if len(self.config) == 1 and 'duration' in self.__dict__:
 				self.config[i]['duration'] = int(self.duration)
 
 			if self.config[i]['action'] == 'off':
@@ -188,7 +188,7 @@ class Display:
 						loop_itt += 1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
-					
+
 		printSuccess('Actions completed.')	
 
 	#: Loop Logic		
