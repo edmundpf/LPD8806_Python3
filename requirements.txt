@@ -1,0 +1,2 @@
+colorful==0.4.4
+spidev==3.2
