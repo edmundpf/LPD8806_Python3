@@ -1,7 +1,7 @@
 [
 	{
 		"duration": 0,
-		"loops": 0,
+		"loops": -1,
 		"action": "color",
 		"args": {"color": null}
 	}
