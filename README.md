@@ -2,7 +2,7 @@
 
 ![LPD8806 CLI Example](https://i.imgur.com/J6heTvG.png "LPD8806 CLI Example")
 
-## Credit to Sh4d and adammhaile for the initial Python2 implementation 👍: 
+## Credit to Sh4d and adammhaile for the initial Python2 implementation: 
 * https://github.com/Sh4d/LPD8806
 * https://github.com/adammhaile/RPi-LPD8806
 
