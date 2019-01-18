@@ -134,7 +134,10 @@ class Display:
 
 	def doActions(self):
 
-		for i in range(0, self.config):
+		for i in range(0, len(self.config)):
+
+			if len(self.config) == 0 and 'duration' in self.__dict__:
+				self.config[i]['duration'] = int(self.duration)
 
 			if action == 'off':
 				printLog(colorful.bold_purple("Turning Pi LED's off..."))
