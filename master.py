@@ -77,6 +77,7 @@ class Display:
 
 			args = {'file': ['-f', '--file'],
 					'duration': ['-d', '--duration'],
+					'loops': ['-l', '--loops'],
 					'args': ['-a', '--args']}
 
 			print_args = []
@@ -108,6 +109,8 @@ class Display:
 				req_exit = printError('File not valid.')
 			if 'duration' in self.__dict__ and not intCheck(self.__dict__['duration']):
 				req_exit = printError('Invalid duration.')
+			if 'loops' in self.__dict__ and not intCheck(self.__dict__['loops']):
+				req_exit = printError('Invalid number of loops.')
 
 			if req_exit == True:
 				printExit('Invalid arguments.')
@@ -138,6 +141,9 @@ class Display:
 
 			if len(self.config) == 1 and 'duration' in self.__dict__:
 				self.config[i]['duration'] = int(self.duration)
+
+			if len(self.config) == 1 and 'loops' in self.__dict__:
+				self.config[i]['loops'] = int(self.loops)
 
 			if self.config[i]['action'] == 'off':
 				printLog(colorful.bold_purple("Turning Pi LED's off..."))
