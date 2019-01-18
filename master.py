@@ -189,7 +189,8 @@ class Display:
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
-		led.all_off() 
+		if self.config[-1]['action'] != 'off':
+			led.all_off() 
 
 		printSuccess('Actions completed.')	
 
