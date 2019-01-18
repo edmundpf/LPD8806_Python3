@@ -139,7 +139,7 @@ class Display:
 			if len(self.config) == 0 and 'duration' in self.__dict__:
 				self.config[i]['duration'] = int(self.duration)
 
-			if action == 'off':
+			if self.config[i]['action'] == 'off':
 				printLog(colorful.bold_purple("Turning Pi LED's off..."))
 				loop_itt = -1
 				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
@@ -154,7 +154,7 @@ class Display:
 						loop_itt += 1
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
-			elif action == 'color':
+			elif self.config[i]['action'] == 'color':
 				loop_itt = -1
 				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 				while loop_bool == True:
@@ -170,7 +170,7 @@ class Display:
 						loop_itt += 1
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
-			elif action == 'rainbow':
+			elif self.config[i]['action'] == 'rainbow':
 				loop_itt = -1
 				anim = Rainbow(led)
 				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
