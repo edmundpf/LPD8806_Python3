@@ -13,30 +13,30 @@
 * Control LED's via simple JSON config files
 
 ## Install
-```
+``` bash
 git clone git@github.com:edmundpf/LPD8806_Python3.git
 cd LPD8806_Python3/
 ```
 
 ## Install CLI
-```
+``` bash
 cd /usr/bin/
 sudo bash -c 'cat > led'
 cd /home/pi/LED && py master.py "$@"
 ```
 * Hit _enter_ then _ctrl+c_ to save
-```
+``` bash
 sudo chmod +x led
 ```
 * Now you can use the CLI anywhere on the system via the **led** command
 
 ## Usage
 ### Without CLI installed (must be called within root directory i.e. _LPD8806_Python3/_)
-```
+``` python
 python3 master.py -f actions/rainbow.json
 ```
 ### With CLI installed (can be called system-wide)
-```
+``` bash
 led -f actions/rainbow.json
 ```
 ### CLI flags
@@ -60,7 +60,7 @@ led -f actions/rainbow.json
   * _Applies to **all actions**_
   * Can input multiple args, config file args will be overwritten in order of arguments
   * For example let's look at the _color.json_ preset config file:
-  ```
+  ``` JSON
     [
       {
         "duration": 0,
@@ -117,7 +117,7 @@ led -f actions/rainbow.json
       * Turns off after execution
   * Single Actions
     * _duration, loops, and args_ can be modified via CLI
-    ```
+    ``` JSON
     [
       {
         "duration": 0,
@@ -129,7 +129,7 @@ led -f actions/rainbow.json
     ```
   * Multiple Actions
     * Arguments **CANNOT** be modified via CLI (just call the config file name)
-    ```
+    ``` JSON
     [
       {
         "duration": 4,
