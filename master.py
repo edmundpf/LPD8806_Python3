@@ -128,78 +128,96 @@ class Display:
 
 	def getConfig(self):
 
-		text = getFileJSON(self.file)
-		self.config = json.loads(text)
-		printLog(colorful.bold_orange('CONFIG: ') + str(self.config))
-		printSuccess('Unloaded JSON config file.')
+		try:
+
+			text = getFileJSON(self.file)
+			self.config = json.loads(text)
+			printLog(colorful.bold_orange('CONFIG: ') + str(self.config))
+			printSuccess('Unloaded JSON config file.')
+
+		except Exception as e:
+			if str(e)[-1] != '.':
+				e_str = str(e) + '.'
+			else:
+				e_str = str(e)
+			printExit('Could not parse JSON: ' + e_str)			
 
 	#: Do actions
 
 	def doActions(self):
 
-		for i in range(0, len(self.config)):
+		try:
 
-			if len(self.config) == 1 and 'duration' in self.__dict__:
-				self.config[i]['duration'] = int(self.duration)
+			for i in range(0, len(self.config)):
 
-			if len(self.config) == 1 and 'loops' in self.__dict__:
-				self.config[i]['loops'] = int(self.loops)
+				if len(self.config) == 1 and 'duration' in self.__dict__:
+					self.config[i]['duration'] = int(self.duration)
 
-			if self.config[i]['action'] == 'off':
-				printLog(colorful.bold_purple("Turning Pi LED's off..."))
-				loop_itt = -1
-				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-				while loop_bool == True:
-					led.all_off()
-					if self.config[i]['duration'] != 0:
-						printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
-						time.sleep(self.config[i]['duration'])
-					if loop_itt == -1:
-						loop_itt += 2
-					elif self.config[i]['loops'] > -1:
-						loop_itt += 1
+				if len(self.config) == 1 and 'loops' in self.__dict__:
+					self.config[i]['loops'] = int(self.loops)
+
+				if self.config[i]['action'] == 'off':
+					printLog(colorful.bold_purple("Turning Pi LED's off..."))
+					loop_itt = -1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+					while loop_bool == True:
+						led.all_off()
+						if self.config[i]['duration'] != 0:
+							printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
+							time.sleep(self.config[i]['duration'])
+						if loop_itt == -1:
+							loop_itt += 2
+						elif self.config[i]['loops'] > -1:
+							loop_itt += 1
+						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
+						printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
-			elif self.config[i]['action'] == 'color':
-				loop_itt = -1
-				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-				while loop_bool == True:
-					if 'args' in self.__dict__ and 'color' in self.args:
-						self.config[i]['args']['color'] = self.args[i]
-					led.fill(color_hex(self.config[i]['args']['color']))
-					led.update()
-					if self.config[i]['duration'] != 0:
-						printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
-						time.sleep(self.config[i]['duration'])
-					if loop_itt == -1:
-						loop_itt += 2
-					elif self.config[i]['loops'] > -1:
-						loop_itt += 1
+				elif self.config[i]['action'] == 'color':
+					loop_itt = -1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+					while loop_bool == True:
+						if 'args' in self.__dict__ and 'color' in self.args:
+							self.config[i]['args']['color'] = self.args[i]
+						led.fill(color_hex(self.config[i]['args']['color']))
+						led.update()
+						if self.config[i]['duration'] != 0:
+							printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
+							time.sleep(self.config[i]['duration'])
+						if loop_itt == -1:
+							loop_itt += 2
+						elif self.config[i]['loops'] > -1:
+							loop_itt += 1
+						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
+						printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
-			elif self.config[i]['action'] == 'rainbow':
-				loop_itt = -1
-				anim = Rainbow(led)
-				rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-				while loop_bool == True:
-					anim.step()
-					led.update()
-					if self.config[i]['duration'] != 0:
-						printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
-						time.sleep(self.config[i]['duration'])
-					if loop_itt == -1:
-						loop_itt += 2
-					elif self.config[i]['loops'] > -1:
-						loop_itt += 1
+				elif self.config[i]['action'] == 'rainbow':
+					loop_itt = -1
+					anim = Rainbow(led)
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+					while loop_bool == True:
+						anim.step()
+						led.update()
+						if self.config[i]['duration'] != 0:
+							printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
+							time.sleep(self.config[i]['duration'])
+						if loop_itt == -1:
+							loop_itt += 2
+						elif self.config[i]['loops'] > -1:
+							loop_itt += 1
+						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
+						printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
-		if self.config[-1]['action'] != 'off':
-			led.all_off() 
+			if self.config[-1]['action'] != 'off':
+				led.all_off() 
 
-		printSuccess('Actions completed.')	
+			printSuccess('Actions completed.')	
+
+		except Exception as e:
+			if str(e)[-1] != '.':
+				e_str = str(e) + '.'
+			else:
+				e_str = str(e)
+			printExit('Invalid config: ' + e_str)	
 
 	#: Loop Logic		
 
