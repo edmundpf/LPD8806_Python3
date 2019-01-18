@@ -222,7 +222,7 @@ class Display:
 
 		except KeyboardInterrupt:
 			led.all_off()
-			print(colorful.bold(' >>> ') + colorful.magenta('Interrupt entered.'))
+			print(colorful.bold(' ----------->>> ') + colorful.magenta('Interrupt entered.'))
 			printExit('Actions interrupted.')
 
 		except Exception as e:
