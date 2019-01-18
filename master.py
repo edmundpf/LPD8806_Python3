@@ -87,7 +87,7 @@ class Display:
 			if init_args[1] in presets:
 				init_args = self.presets(init_args)
 
-			for i in range(0, len(init_args)):
+			for i in range(1, len(init_args)):
 				for key in args:
 					if init_args[i] in args[key]:
 						if (i + 1) < len(init_args):
@@ -257,8 +257,12 @@ class Display:
 			return ['master.py', '-f', 'actions/off.json']
 		elif init_args[1] == '--color':
 			if len(init_args) > 2:
+				if init_args[2] in COLORS:
+					color_temp = COLORS[init_args[2]]
+				else:
+					color_temp = init_args[2]
 				printSuccess('Loading color preset.')
-				return ['master.py', '-f', 'actions/color.json', '-l', '-1', '-a', init_args[2]]
+				return ['master.py', '-f', 'actions/color.json', '-l', '-1', '-a', color_temp]
 			else:
 				printError('Invalid color preset.')
 				printExit('Invalid arguments.')
@@ -266,6 +270,7 @@ class Display:
 		elif init_args[1] == '--rainbow':
 			printSuccess('Loading rainbow preset.')
 			return ['master.py', '-f', 'actions/rainbow.json']
+			
 #:::DRIVER:::
 
 main = Display()

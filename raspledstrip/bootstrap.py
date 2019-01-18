@@ -8,6 +8,7 @@ and checks needed by any script
 from time import sleep
 from .ledstrip import *
 from .animation import *
+from .colorPresets import COLORS
 
 import os.path
 import sys
