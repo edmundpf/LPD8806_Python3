@@ -174,7 +174,7 @@ class Display:
 						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 						if inf_check == False:
 							printLog(colorful.bold_orange(rem) + ' loops remaining.')
-							inf_check == True
+							inf_check = True
 
 				elif self.config[i]['action'] == 'color':
 					loop_itt = -1
@@ -194,7 +194,7 @@ class Display:
 						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 						if inf_check == False:
 							printLog(colorful.bold_orange(rem) + ' loops remaining.')
-							inf_check == True
+							inf_check = True
 
 				elif self.config[i]['action'] == 'rainbow':
 					loop_itt = -1
@@ -213,12 +213,16 @@ class Display:
 						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 						if inf_check == False:
 							printLog(colorful.bold_orange(rem) + ' loops remaining.')
-							inf_check == True
+							inf_check = True
 
 			if self.config[-1]['action'] != 'off':
 				led.all_off() 
 
-			printSuccess('Actions completed.')	
+			printSuccess('Actions completed.')
+
+		except KeyboardInterrupt:
+			led.all_off()
+			printExit('Actions interrupted.')
 
 		except Exception as e:
 			if str(e)[-1] != '.':
