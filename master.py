@@ -150,6 +150,8 @@ class Display:
 
 			for i in range(0, len(self.config)):
 
+				inf_check = False
+
 				if len(self.config) == 1 and 'duration' in self.__dict__:
 					self.config[i]['duration'] = int(self.duration)
 
@@ -170,7 +172,9 @@ class Display:
 						elif self.config[i]['loops'] > -1:
 							loop_itt += 1
 						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-						printLog(colorful.bold_orange(rem) + ' loops remaining.')
+						if inf_check == False:
+							printLog(colorful.bold_orange(rem) + ' loops remaining.')
+							inf_check == True
 
 				elif self.config[i]['action'] == 'color':
 					loop_itt = -1
@@ -188,7 +192,9 @@ class Display:
 						elif self.config[i]['loops'] > -1:
 							loop_itt += 1
 						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-						printLog(colorful.bold_orange(rem) + ' loops remaining.')
+						if inf_check == False:
+							printLog(colorful.bold_orange(rem) + ' loops remaining.')
+							inf_check == True
 
 				elif self.config[i]['action'] == 'rainbow':
 					loop_itt = -1
@@ -205,7 +211,9 @@ class Display:
 						elif self.config[i]['loops'] > -1:
 							loop_itt += 1
 						rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
-						printLog(colorful.bold_orange(rem) + ' loops remaining.')
+						if inf_check == False:
+							printLog(colorful.bold_orange(rem) + ' loops remaining.')
+							inf_check == True
 
 			if self.config[-1]['action'] != 'off':
 				led.all_off() 
