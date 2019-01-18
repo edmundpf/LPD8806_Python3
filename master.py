@@ -152,6 +152,7 @@ class Display:
 						loop_itt += 2
 					elif self.config[i]['loops'] > -1:
 						loop_itt += 1
+					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
 			elif self.config[i]['action'] == 'color':
@@ -168,6 +169,7 @@ class Display:
 						loop_itt += 2
 					elif self.config[i]['loops'] > -1:
 						loop_itt += 1
+					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
 
 			elif self.config[i]['action'] == 'rainbow':
@@ -184,7 +186,9 @@ class Display:
 						loop_itt += 2
 					elif self.config[i]['loops'] > -1:
 						loop_itt += 1
+					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					printLog(colorful.bold_orange(rem) + ' loops remaining.')
+					
 		printSuccess('Actions completed.')	
 
 	#: Loop Logic		
