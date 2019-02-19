@@ -169,7 +169,8 @@ class Display:
 					loop_itt = -1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					while loop_bool == True:
-						proc = Process(proc_name='python3.4', proc_args=['--color', '--rainbow'])
+						proc = Process(proc_name='python{0}.{1}'.format(str(sys.version_info.major), str(sys.version_info.minor)), 
+							proc_args=['ledMaster.py'])
 						proc.killProcesses()
 						led.all_off()
 						if self.config[i]['duration'] != 0:
