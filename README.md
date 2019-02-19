@@ -23,7 +23,7 @@ pip3 install -r requirements.txt
 ``` bash
 cd /usr/bin/
 sudo bash -c 'cat > led'
-cd /home/pi/LED && py master.py "$@"
+cd /home/pi/LED && py ledMaster.py "$@"
 ```
 * Hit _enter_ then _ctrl+c_ to save
 ``` bash
@@ -34,7 +34,7 @@ sudo chmod +x led
 ## Usage
 ### Without CLI installed (must be called within root directory i.e. _LPD8806_Python3/_)
 ``` python
-python3 master.py -f actions/rainbow.json
+python3 ledMaster.py -f actions/rainbow.json
 ```
 ### With CLI installed (can be called system-wide)
 ``` bash
