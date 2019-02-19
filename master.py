@@ -7,6 +7,7 @@ import time
 import datetime
 import colorful
 from raspledstrip.bootstrap import *
+from utils.processControl import Process
 
 #:::INITIALIZATION:::
 
@@ -168,6 +169,8 @@ class Display:
 					loop_itt = -1
 					rem, loop_bool = self.loopLogic(loop_itt, self.config[i]['loops'])
 					while loop_bool == True:
+						proc = Process(proc_name='python3.4', proc_args=['--color', '--rainbow'])
+						proc.killProcesses()
 						led.all_off()
 						if self.config[i]['duration'] != 0:
 							printLog('Sleeping for ' + colorful.bold_blue(str(self.config[i]['duration'])) + ' seconds.')
