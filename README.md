@@ -23,7 +23,7 @@ pip3 install -r requirements.txt
 ``` bash
 cd /usr/bin/
 sudo bash -c 'cat > led'
-cd /home/pi/LED && py ledMaster.py "$@"
+cd /YOUR_REPO_PATH && py ledMaster.py "$@"
 ```
 * Hit _enter_ then _ctrl+c_ to save
 ``` bash
